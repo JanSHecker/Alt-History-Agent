@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://host.docker.internal:8000/api";
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://host.docker.internal:8000/api";
 
 export default function DivergencePoints() {
   const [loading, setLoading] = useState(true);
@@ -42,7 +43,13 @@ export default function DivergencePoints() {
 
   const handleSelect = (divergencePoint) => {
     setSelectedId(divergencePoint.id);
-    navigate('/timeline', { state: { idea, divergenceData: data, selectedDivergence: divergencePoint } });
+    navigate("/timeline", {
+      state: {
+        idea,
+        divergenceData: data,
+        selectedDivergence: divergencePoint,
+      },
+    });
   };
 
   if (loading) {

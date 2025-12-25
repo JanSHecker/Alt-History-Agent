@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://host.docker.internal:8000/api";
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://host.docker.internal:8000/api";
 
 export default function Timeline() {
   const [loading, setLoading] = useState(true);
@@ -109,7 +110,8 @@ export default function Timeline() {
       <div className="bg-slate-800 rounded-lg shadow-2xl p-8">
         <div className="text-center py-12">
           <p className="text-purple-200 text-lg mb-4">
-            Ready to generate an alternative timeline based on your idea and selected divergence point.
+            Ready to generate an alternative timeline based on your idea and
+            selected divergence point.
           </p>
           <button
             onClick={generateTimeline}
@@ -133,7 +135,8 @@ export default function Timeline() {
         <span className="font-semibold">{divergence.title}</span>
       </p>
       <p className="text-purple-200 mb-6">
-        Review and edit the timeline below. Make any changes you want before proceeding to generate narrative chapters.
+        Review and edit the timeline below. Make any changes you want before
+        proceeding to generate narrative chapters.
       </p>
 
       <div className="mt-8 relative">
@@ -142,81 +145,98 @@ export default function Timeline() {
 
         {/* Timeline entries */}
         <div className="space-y-8">
-          {editedTimeline && editedTimeline.map((entry, idx) => (
-            <div key={idx} className="relative pl-20">
-              {/* Timeline dot */}
-              <div className="absolute left-6 w-5 h-5 rounded-full bg-purple-600 border-4 border-slate-800"></div>
+          {editedTimeline &&
+            editedTimeline.map((entry, idx) => (
+              <div key={idx} className="relative pl-20">
+                {/* Timeline dot */}
+                <div className="absolute left-6 w-5 h-5 rounded-full bg-purple-600 border-4 border-slate-800"></div>
 
-              {/* Content */}
-              <div className="bg-slate-700 rounded-lg p-4">
-                {editingEntry === idx ? (
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-sm font-medium text-purple-300 mb-1">Date</label>
-                      <input
-                        type="text"
-                        value={entry.date}
-                        onChange={(e) => handleFieldChange(idx, 'date', e.target.value)}
-                        className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-purple-300 mb-1">Event Title</label>
-                      <input
-                        type="text"
-                        value={entry.event}
-                        onChange={(e) => handleFieldChange(idx, 'event', e.target.value)}
-                        className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-purple-300 mb-1">Description</label>
-                      <textarea
-                        value={entry.description}
-                        onChange={(e) => handleFieldChange(idx, 'description', e.target.value)}
-                        rows={3}
-                        className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      />
-                    </div>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => handleSaveEntry(idx)}
-                        className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={handleCancelEdit}
-                        className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md transition-colors"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="text-lg font-semibold text-white">
-                        {entry.event}
-                      </h3>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-purple-300 text-sm font-mono whitespace-nowrap">
-                          {entry.date}
-                        </span>
+                {/* Content */}
+                <div className="bg-slate-700 rounded-lg p-4">
+                  {editingEntry === idx ? (
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-sm font-medium text-purple-300 mb-1">
+                          Date
+                        </label>
+                        <input
+                          type="text"
+                          value={entry.date}
+                          onChange={(e) =>
+                            handleFieldChange(idx, "date", e.target.value)
+                          }
+                          className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-purple-300 mb-1">
+                          Event Title
+                        </label>
+                        <input
+                          type="text"
+                          value={entry.event}
+                          onChange={(e) =>
+                            handleFieldChange(idx, "event", e.target.value)
+                          }
+                          className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-purple-300 mb-1">
+                          Description
+                        </label>
+                        <textarea
+                          value={entry.description}
+                          onChange={(e) =>
+                            handleFieldChange(
+                              idx,
+                              "description",
+                              e.target.value
+                            )
+                          }
+                          rows={3}
+                          className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                      <div className="flex space-x-2">
                         <button
-                          onClick={() => handleEditEntry(idx)}
-                          className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-md transition-colors"
+                          onClick={() => handleSaveEntry(idx)}
+                          className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
                         >
-                          Edit
+                          Save
+                        </button>
+                        <button
+                          onClick={handleCancelEdit}
+                          className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md transition-colors"
+                        >
+                          Cancel
                         </button>
                       </div>
                     </div>
-                    <p className="text-purple-100">{entry.description}</p>
-                  </>
-                )}
+                  ) : (
+                    <>
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="text-lg font-semibold text-white">
+                          {entry.event}
+                        </h3>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-purple-300 text-sm font-mono whitespace-nowrap">
+                            {entry.date}
+                          </span>
+                          <button
+                            onClick={() => handleEditEntry(idx)}
+                            className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-md transition-colors"
+                          >
+                            Edit
+                          </button>
+                        </div>
+                      </div>
+                      <p className="text-purple-100">{entry.description}</p>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
 
