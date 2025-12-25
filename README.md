@@ -16,10 +16,12 @@ A sophisticated multi-agent system built with LangGraph for generating creative 
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Docker and Docker Compose
 - API key for OpenAI or Anthropic
 
 ### Automated Setup
+
 ```bash
 # Clone the repository
 git clone <repository-url>
@@ -38,6 +40,7 @@ docker-compose up
 ```
 
 ### Manual Setup
+
 ```bash
 # Backend setup
 cd backend
@@ -150,4 +153,4 @@ If you encounter issues or have questions:
 
 ---
 
-*Explore the endless possibilities of "what if" in history.*
+_Explore the endless possibilities of "what if" in history._
