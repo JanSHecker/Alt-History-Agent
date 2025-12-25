@@ -1,0 +1,30 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/.env:/app/.env
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+    networks:
+      - althistory
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://host.docker.internal:8000/api
+    depends_on:
+      - backend
+    networks:
+      - althistory
+
+networks:
+  althistory:
+    driver: bridge

@@ -1,0 +1,9 @@
+{
+  "name": "alt-history-agent-backend",
+  "version": "0.1.0",
+  "description": "Backend API for Alt History Agent",
+  "scripts": {
+    "start": "python main.py",
+    "dev": "python main.py"
+  }
+}
