@@ -1,3 +1,6 @@
+# Copilot workspace files
+workspace/
+
 # Environment variables
 .env
 backend/.env
