@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const API_URL =
@@ -10,10 +10,22 @@ export default function Timeline() {
   const [timeline, setTimeline] = useState(null);
   const [editingEntry, setEditingEntry] = useState(null);
   const [editedTimeline, setEditedTimeline] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
   const idea = location.state?.idea;
+  const endpoint = location.state?.endpoint;
   const divergence = location.state?.selectedDivergence;
 
-  // Removed useEffect to prevent automatic generation on page load
+  useEffect(() => {
+    if (idea && divergence) {
+      generateTimeline();
+    } else {
+      setLoading(false);
+      setError(
+        "Missing idea or divergence point. Please go back and select one."
+      );
+    }
+  }, [idea, divergence]);
 
   const generateTimeline = async () => {
     try {
@@ -27,6 +39,7 @@ export default function Timeline() {
         },
         body: JSON.stringify({
           idea,
+          endpoint,
           selected_divergence: divergence,
         }),
       });
@@ -69,6 +82,7 @@ export default function Timeline() {
     navigate("/chapters", {
       state: {
         idea,
+        endpoint,
         divergenceData: location.state.divergenceData,
         selectedDivergence: divergence,
         timelineData: editedTimeline,
@@ -110,16 +124,10 @@ export default function Timeline() {
       <div className="bg-slate-800 rounded-lg shadow-2xl p-8">
         <div className="text-center py-12">
           <p className="text-purple-200 text-lg mb-4">
-            Ready to generate an alternative timeline based on your idea and
-            selected divergence point.
+            Generating alternative timeline based on your idea and selected
+            divergence point...
           </p>
-          <button
-            onClick={generateTimeline}
-            className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
-            disabled={loading}
-          >
-            Generate Timeline
-          </button>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-500 mx-auto"></div>
         </div>
       </div>
     );
@@ -138,6 +146,16 @@ export default function Timeline() {
         Review and edit the timeline below. Make any changes you want before
         proceeding to generate narrative chapters.
       </p>
+
+      <div className="mb-6">
+        <button
+          onClick={generateTimeline}
+          className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+          disabled={loading}
+        >
+          {loading ? "Regenerating..." : "Reload Timeline"}
+        </button>
+      </div>
 
       <div className="mt-8 relative">
         {/* Timeline line */}

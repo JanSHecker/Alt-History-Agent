@@ -2,11 +2,13 @@ from langchain_core.prompts import ChatPromptTemplate
 from agents.llm import get_llm
 import json
 
-async def generate_chapters(user_idea: str, divergence_point: dict, timeline: list) -> dict:
+async def generate_chapters(user_idea: str, endpoint: str, divergence_point: dict, timeline: list) -> dict:
     """
     Generate narrative chapters based on the timeline
     Returns: dict with list of chapters
     """
+    print(f"DEBUG: Starting chapter generation for idea: {user_idea[:50]}...")
+    print(f"DEBUG: Timeline has {len(timeline)} entries")
     llm = get_llm()
     
     # For MVP, we'll generate 3 chapters covering different periods
@@ -34,6 +36,13 @@ async def generate_chapters(user_idea: str, divergence_point: dict, timeline: li
         last_date = chapter_timeline[-1]['date'] if chapter_timeline else "Unknown"
         time_period = f"{first_date} to {last_date}"
         
+        # Add endpoint guidance if provided
+        endpoint_instruction = ""
+        endpoint_text = ""
+        if endpoint:
+            endpoint_instruction = "\n- Guide the narrative toward the desired endpoint: {endpoint}".format(endpoint=endpoint)
+            endpoint_text = "\n\nDesired endpoint: {endpoint}".format(endpoint=endpoint)
+        
         prompt = ChatPromptTemplate.from_messages([
             ("system", """You are a talented historical fiction writer creating an alternative history narrative.
 Write an engaging, detailed chapter that brings the timeline events to life.
@@ -45,14 +54,12 @@ Your chapter should:
 - Show cause and effect relationships
 - Maintain a narrative flow
 - Be historically plausible and engaging
-- Use a literary, engaging style
+- Use a literary, engaging style{endpoint_instruction}
 
 Return your response as valid JSON:
-{{
-    "title": "Engaging chapter title",
-    "content": "Full chapter text in markdown format with paragraphs separated by \\n\\n"
-}}"""),
-            ("human", """Original alternative history idea: {idea}
+- title: string, engaging chapter title
+- content: string, full chapter text in markdown format""".format(endpoint_instruction=endpoint_instruction)),
+            ("human", """Original alternative history idea: {idea}{endpoint_text}
 
 Divergence point: {divergence_description}
 
@@ -62,26 +69,35 @@ Time Period: {time_period}
 Key events to cover:
 {timeline_events}
 
-Create an engaging narrative chapter.""")
+Create an engaging narrative chapter.""".format(
+                idea=user_idea,
+                endpoint_text=endpoint_text,
+                divergence_description=divergence_point["description"],
+                chapter_num=chapter_num,
+                time_period=time_period,
+                timeline_events=timeline_text
+            ))
         ])
         
+        print(f"DEBUG: Generating chapter {chapter_num} for period: {time_period}")
         chain = prompt | llm
-        response = await chain.ainvoke({
-            "idea": user_idea,
-            "divergence_description": divergence_point["description"],
-            "chapter_num": chapter_num,
-            "time_period": time_period,
-            "timeline_events": timeline_text
-        })
+        response = await chain.ainvoke({})
+        
+        print(f"DEBUG: Chapter {chapter_num} LLM response received, length: {len(response.content)}")
         
         # Parse JSON from response
         content = response.content
+        print(f"DEBUG: Raw content: {content[:200]}...")
+        
         if "```json" in content:
             content = content.split("```json")[1].split("```")[0].strip()
         elif "```" in content:
             content = content.split("```")[1].split("```")[0].strip()
         
+        print(f"DEBUG: Cleaned content: {content[:200]}...")
+        
         chapter_data = json.loads(content)
+        print(f"DEBUG: Chapter {chapter_num} parsed successfully: {chapter_data.get('title', 'No title')[:50]}...")
         chapters.append({
             "number": chapter_num,
             "title": chapter_data["title"],

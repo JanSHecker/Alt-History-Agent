@@ -7,8 +7,18 @@ export default function IdeaInput() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(
+      "[FRONTEND DEBUG] IdeaInput handleSubmit called with idea:",
+      idea
+    );
     if (idea.trim()) {
-      navigate("/divergence", { state: { idea: idea.trim() } });
+      console.log(
+        "[FRONTEND DEBUG] Navigating to /endpoint with idea:",
+        idea.trim()
+      );
+      navigate("/endpoint", { state: { idea: idea.trim() } });
+    } else {
+      console.log("[FRONTEND DEBUG] Idea is empty, not navigating");
     }
   };
 
@@ -22,7 +32,7 @@ export default function IdeaInput() {
   return (
     <div className="bg-slate-800 rounded-lg shadow-2xl p-8">
       <h2 className="text-3xl font-bold text-white mb-4">
-        What historical event would you like to reimagine?
+        What historical sceanrio would you like to explore?
       </h2>
       <p className="text-purple-200 mb-6">
         Enter your alternative history idea below. Be specific about the
@@ -43,7 +53,7 @@ export default function IdeaInput() {
           disabled={!idea.trim()}
           className="w-full px-6 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
         >
-          Generate Divergence Points
+          Define Endpoint
         </button>
       </form>
 

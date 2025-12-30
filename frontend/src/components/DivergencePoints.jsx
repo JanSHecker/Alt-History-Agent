@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const API_URL =
@@ -12,29 +12,50 @@ export default function DivergencePoints() {
   const navigate = useNavigate();
   const location = useLocation();
   const idea = location.state?.idea;
+  const endpoint = location.state?.endpoint;
 
-  // Removed useEffect to prevent automatic generation on page load
+  useEffect(() => {
+    if (idea) {
+      generateDivergencePoints();
+    } else {
+      setLoading(false);
+      setError("No idea provided. Please go back and enter an idea.");
+    }
+  }, [idea]);
 
   const generateDivergencePoints = async () => {
+    console.log(
+      "[FRONTEND DEBUG] generateDivergencePoints called with idea:",
+      idea,
+      "endpoint:",
+      endpoint
+    );
     try {
       setLoading(true);
       setError(null);
 
+      console.log(
+        "[FRONTEND DEBUG] Fetching from:",
+        `${API_URL}/divergence-points`
+      );
       const response = await fetch(`${API_URL}/divergence-points`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ idea }),
+        body: JSON.stringify({ idea, endpoint }),
       });
 
+      console.log("[FRONTEND DEBUG] Response status:", response.status);
       if (!response.ok) {
         throw new Error("Failed to generate divergence points");
       }
 
       const result = await response.json();
+      console.log("[FRONTEND DEBUG] Response data:", result);
       setData(result);
     } catch (err) {
+      console.error("[FRONTEND DEBUG] Error:", err.message);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -46,6 +67,7 @@ export default function DivergencePoints() {
     navigate("/timeline", {
       state: {
         idea,
+        endpoint,
         divergenceData: data,
         selectedDivergence: divergencePoint,
       },
@@ -86,15 +108,9 @@ export default function DivergencePoints() {
       <div className="bg-slate-800 rounded-lg shadow-2xl p-8">
         <div className="text-center py-12">
           <p className="text-purple-200 text-lg mb-4">
-            Ready to analyze your idea and generate possible divergence points.
+            Generating divergence points for your idea...
           </p>
-          <button
-            onClick={generateDivergencePoints}
-            className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
-            disabled={loading}
-          >
-            Generate Divergence Points
-          </button>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-500 mx-auto"></div>
         </div>
       </div>
     );
@@ -108,6 +124,16 @@ export default function DivergencePoints() {
       <h3 className="text-xl font-semibold text-white mb-4">
         Select a Divergence Point:
       </h3>
+
+      <div className="mb-4">
+        <button
+          onClick={generateDivergencePoints}
+          className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+          disabled={loading}
+        >
+          {loading ? "Regenerating..." : "Reload Divergence Points"}
+        </button>
+      </div>
 
       <div className="space-y-4">
         {data.divergence_points.map((point) => (

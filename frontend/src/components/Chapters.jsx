@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const API_URL =
@@ -10,10 +10,20 @@ export default function Chapters() {
   const [chapters, setChapters] = useState([]);
   const location = useLocation();
   const idea = location.state?.idea;
+  const endpoint = location.state?.endpoint;
   const divergence = location.state?.selectedDivergence;
   const timeline = location.state?.timelineData;
 
-  // Removed useEffect to prevent automatic generation on page load
+  useEffect(() => {
+    if (idea && divergence && timeline) {
+      generateChapters();
+    } else {
+      setLoading(false);
+      setError(
+        "Missing required data. Please go back and complete previous steps."
+      );
+    }
+  }, [idea, divergence, timeline]);
 
   const generateChapters = async () => {
     try {
@@ -27,6 +37,7 @@ export default function Chapters() {
         },
         body: JSON.stringify({
           idea,
+          endpoint,
           divergence_point: divergence,
           timeline,
         }),
@@ -82,15 +93,9 @@ export default function Chapters() {
       <div className="bg-slate-800 rounded-lg shadow-2xl p-8">
         <div className="text-center py-12">
           <p className="text-purple-200 text-lg mb-4">
-            Ready to generate narrative chapters based on your timeline.
+            Generating narrative chapters based on your timeline...
           </p>
-          <button
-            onClick={generateChapters}
-            className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
-            disabled={loading}
-          >
-            Generate Chapters
-          </button>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-500 mx-auto"></div>
         </div>
       </div>
     );
@@ -105,6 +110,18 @@ export default function Chapters() {
         <p className="text-purple-200">
           Based on: <span className="font-semibold">{divergence.title}</span>
         </p>
+      </div>
+
+      <div className="bg-slate-800 rounded-lg shadow-2xl p-8">
+        <div className="text-center">
+          <button
+            onClick={generateChapters}
+            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+            disabled={loading}
+          >
+            {loading ? "Regenerating..." : "Reload Chapters"}
+          </button>
+        </div>
       </div>
 
       {chapters.map((chapter) => (
