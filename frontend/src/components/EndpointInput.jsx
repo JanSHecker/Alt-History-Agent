@@ -58,20 +58,21 @@ export default function EndpointInput() {
   };
 
   const handleNext = () => {
-    const finalEndpoint = selectedEndpoint || customEndpoint.trim() || endpoint || null;
+    const finalEndpoint =
+      selectedEndpoint || customEndpoint.trim() || endpoint || null;
     console.log(
       "[FRONTEND DEBUG] Navigating to /timeline with idea:",
       idea,
       "endpoint:",
       finalEndpoint
     );
-    navigate("/timeline", { 
-      state: { 
-        idea, 
+    navigate("/timeline", {
+      state: {
+        idea,
         endpoint: finalEndpoint,
         divergenceData,
-        selectedDivergence
-      } 
+        selectedDivergence,
+      },
     });
   };
 
@@ -80,13 +81,13 @@ export default function EndpointInput() {
       "[FRONTEND DEBUG] Skipping endpoint, navigating to /timeline with idea:",
       idea
     );
-    navigate("/timeline", { 
-      state: { 
-        idea, 
+    navigate("/timeline", {
+      state: {
+        idea,
         endpoint: endpoint || null,
         divergenceData,
-        selectedDivergence
-      } 
+        selectedDivergence,
+      },
     });
   };
 
@@ -106,7 +107,10 @@ export default function EndpointInput() {
         Refine Desired Endpoint (Optional)
       </h2>
       <p className="text-purple-200 mb-6">
-        Based on your selected divergence point "{selectedDivergence?.title}", you can optionally define where you want this alternative history scenario to end up. This helps guide the timeline generation toward your desired outcome.
+        Based on your selected divergence point "{selectedDivergence?.title}",
+        you can optionally define where you want this alternative history
+        scenario to end up. This helps guide the timeline generation toward your
+        desired outcome.
       </p>
 
       <div className="space-y-6">
