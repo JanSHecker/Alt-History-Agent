@@ -13,10 +13,10 @@ export default function IdeaInput() {
     );
     if (idea.trim()) {
       console.log(
-        "[FRONTEND DEBUG] Navigating to /endpoint with idea:",
+        "[FRONTEND DEBUG] Navigating to /divergence with idea:",
         idea.trim()
       );
-      navigate("/endpoint", { state: { idea: idea.trim() } });
+      navigate("/divergence", { state: { idea: idea.trim() } });
     } else {
       console.log("[FRONTEND DEBUG] Idea is empty, not navigating");
     }
@@ -53,7 +53,7 @@ export default function IdeaInput() {
           disabled={!idea.trim()}
           className="w-full px-6 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
         >
-          Define Endpoint
+          Explore Divergence Points
         </button>
       </form>
 

@@ -14,6 +14,9 @@ export default function EndpointInput() {
   const navigate = useNavigate();
   const location = useLocation();
   const idea = location.state?.idea;
+  const endpoint = location.state?.endpoint;
+  const divergenceData = location.state?.divergenceData;
+  const selectedDivergence = location.state?.selectedDivergence;
 
   const generateEndpoints = async () => {
     console.log(
@@ -55,29 +58,43 @@ export default function EndpointInput() {
   };
 
   const handleNext = () => {
-    const endpoint = selectedEndpoint || customEndpoint.trim() || null;
+    const finalEndpoint = selectedEndpoint || customEndpoint.trim() || endpoint || null;
     console.log(
-      "[FRONTEND DEBUG] Navigating to /divergence with idea:",
+      "[FRONTEND DEBUG] Navigating to /timeline with idea:",
       idea,
       "endpoint:",
-      endpoint
+      finalEndpoint
     );
-    navigate("/divergence", { state: { idea, endpoint } });
+    navigate("/timeline", { 
+      state: { 
+        idea, 
+        endpoint: finalEndpoint,
+        divergenceData,
+        selectedDivergence
+      } 
+    });
   };
 
   const handleSkip = () => {
     console.log(
-      "[FRONTEND DEBUG] Skipping endpoint, navigating to /divergence with idea:",
+      "[FRONTEND DEBUG] Skipping endpoint, navigating to /timeline with idea:",
       idea
     );
-    navigate("/divergence", { state: { idea, endpoint: null } });
+    navigate("/timeline", { 
+      state: { 
+        idea, 
+        endpoint: endpoint || null,
+        divergenceData,
+        selectedDivergence
+      } 
+    });
   };
 
-  if (!idea) {
+  if (!idea || !selectedDivergence) {
     return (
       <div className="bg-slate-800 rounded-lg shadow-2xl p-8">
         <p className="text-red-400">
-          No idea provided. Please go back and enter an idea.
+          Missing required data. Please go back and select a divergence point.
         </p>
       </div>
     );
@@ -86,12 +103,10 @@ export default function EndpointInput() {
   return (
     <div className="bg-slate-800 rounded-lg shadow-2xl p-8">
       <h2 className="text-3xl font-bold text-white mb-4">
-        Define Desired Endpoint (Optional)
+        Refine Desired Endpoint (Optional)
       </h2>
       <p className="text-purple-200 mb-6">
-        Optionally define where you want this alternative history scenario to
-        end up. This helps guide the timeline generation toward your desired
-        outcome.
+        Based on your selected divergence point "{selectedDivergence?.title}", you can optionally define where you want this alternative history scenario to end up. This helps guide the timeline generation toward your desired outcome.
       </p>
 
       <div className="space-y-6">
@@ -189,7 +204,7 @@ export default function EndpointInput() {
             disabled={!selectedEndpoint && !customEndpoint.trim()}
             className="flex-1 px-6 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
           >
-            Continue to Divergence
+            Generate Timeline
           </button>
         </div>
       </div>

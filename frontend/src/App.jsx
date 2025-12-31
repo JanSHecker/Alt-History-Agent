@@ -11,8 +11,8 @@ function App() {
   const getCurrentStage = () => {
     const path = location.pathname;
     if (path === "/idea") return "idea";
-    if (path === "/endpoint") return "endpoint";
     if (path === "/divergence") return "divergence";
+    if (path === "/endpoint") return "endpoint";
     if (path === "/timeline") return "timeline";
     if (path === "/chapters") return "chapters";
     return "idea";
@@ -36,12 +36,12 @@ function App() {
         {/* Progress Indicator */}
         <div className="max-w-4xl mx-auto mb-8">
           <div className="flex justify-between items-center">
-            {["Idea", "Endpoint", "Divergence", "Timeline", "Chapters"].map(
+            {["Idea", "Divergence", "Endpoint", "Timeline", "Chapters"].map(
               (step, idx) => {
                 const stages = [
                   "idea",
-                  "endpoint",
                   "divergence",
+                  "endpoint",
                   "timeline",
                   "chapters",
                 ];
@@ -88,8 +88,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/idea" />} />
             <Route path="/idea" element={<IdeaInput />} />
-            <Route path="/endpoint" element={<EndpointInput />} />
             <Route path="/divergence" element={<DivergencePoints />} />
+            <Route path="/endpoint" element={<EndpointInput />} />
             <Route path="/timeline" element={<Timeline />} />
             <Route path="/chapters" element={<Chapters />} />
           </Routes>

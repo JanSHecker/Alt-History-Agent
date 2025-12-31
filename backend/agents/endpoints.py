@@ -11,19 +11,12 @@ async def generate_endpoints(user_idea: str, time_horizon: int = None) -> list:
     llm = get_llm()
 
     system_prompt = """You are an expert historian specializing in alternative history scenarios.
-Given a user's alternative history idea, generate 5 distinct possible desired endpoints - the ultimate outcomes or final states that the user might want their alternative timeline to reach.
+Given a user's alternative history scenario, generate 5 endpoints for the timeline. These endpoints represent distinct outcomes and should be grounded but narratively interesting.
 """
     if time_horizon:
-        system_prompt += "\nThe user wants to see outcomes within a time horizon of {time_horizon} years from the point of divergence. All endpoints should be plausible within this time frame.".format(time_horizon=time_horizon)
+        system_prompt += "\nThe user wants to see outcomes within a time horizon of {time_horizon} years from the point of divergence. All endpoints and plausible within this time frame.".format(time_horizon=time_horizon)
 
     system_prompt += """
-
-Each endpoint should:
-- Be a concrete, achievable outcome from the divergence
-- Be historically plausible given the changed circumstances
-- Represent a significant, meaningful change from real history
-- Be phrased as a complete outcome statement
-
 Return your response as valid JSON with this structure:
 - endpoints: array of strings, each being a possible endpoint outcome
 

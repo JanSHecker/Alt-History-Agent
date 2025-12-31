@@ -64,7 +64,7 @@ export default function DivergencePoints() {
 
   const handleSelect = (divergencePoint) => {
     setSelectedId(divergencePoint.id);
-    navigate("/timeline", {
+    navigate("/endpoint", {
       state: {
         idea,
         endpoint,
