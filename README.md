@@ -1,6 +1,5 @@
 # Alt History Agent
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/docker-compose-blue)](docker-compose.yml)
 
 A sophisticated multi-agent system built with LangGraph for generating creative and plausible alternative history scenarios. Explore "what if" moments in history through AI-powered narrative generation.
@@ -123,33 +122,11 @@ alt-history-agent/
 └── setup.ps1              # Automated setup script
 ```
 
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🙏 Acknowledgments
 
 - Built with [LangGraph](https://langchain-ai.github.io/langgraph/) for multi-agent orchestration
 - Powered by advanced LLMs from OpenAI and Anthropic
 - Inspired by alternative history literature and historical scholarship
-
-## 📞 Support
-
-If you encounter issues or have questions:
-
-- Check the [Setup Guide](SETUP.md) for installation help
-- Review [OpenRouter Configuration](OPENROUTER.md) for API setup
-- Open an issue on GitHub for bugs or feature requests
 
 ---
 
